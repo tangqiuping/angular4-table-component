@@ -1,0 +1,70 @@
+<!-- <div class="layout" *ngIf="displayDialog">
+    <div class="edit">
+        <h4>请编辑你的东西</h4>
+        <form class="form-horizontal" [formGroup]="user" novalidate>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" formControlName="name" [formControl]="user.controls['name']" [class.error]="user.controls['name'].hasError('required') || (user.controls['name'].hasError('minlength') || user.controls['name'].hasError('maxlength')) && (user.controls['name'].dirty || user.controls['name'].touched)">
+                    <div class="alert-danger" *ngIf="user.controls['name'].hasError('required')">此项是必填项</div>
+                    <div class="alert-danger" *ngIf="(user.controls['name'].hasError('minlength') || user.controls['name'].hasError('maxlength')) && (user.controls['name'].dirty || user.controls['name'].touched)">最小长度为4,最大长度为8</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" formControlName="email" [class.error]="user.get('email').hasError('email')">
+                    <div class="alert-danger" *ngIf="user.get('email').hasError('email')">您的邮箱格式不对</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">City</label>
+                <div class="col-sm-10">
+                    <input class="form-control" formControlName="city" [formControl]="user.controls['city']" [class.error]="user.controls['city'].hasError('required')">
+                    <div class="alert-danger" *ngIf="user.controls['city'].hasError('required')">此项是必填项</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Age</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" formControlName="age" [formControl]="user.controls['age']" [class.error]="user.controls['age'].hasError('required')">
+                    <div class="alert-danger" *ngIf="user.controls['age'].hasError('required')">此项是必填项</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="button-group">
+                    <button type="button" pButton icon="fa-close" label="Save" (click)="save()"  [disabled]="user.invalid"></button>
+                    <button type="button" pButton icon="fa-check" label="Cancel" (click)="cancel()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> -->
+
+
+<div class="layout" *ngIf="displayDialog">
+    <div class="edit">
+        <h4>请编辑你的东西</h4>
+        <form class="form-horizontal" [formGroup]="user" novalidate>
+            <div class="form-group" [ngSwitch]="detail.controlType" *ngFor="let detail of detailColumns">
+                <label for="inputEmail3" class="col-sm-2 control-label">{{detail.label}}</label>
+                <div class="col-sm-10">
+                    <input [type]="detail.type" *ngSwitchCase="'textbox'" class="form-control"  [formControlName]="detail.label" [class.error]="(user.get(detail.label).dirty || user.get(detail.label).touched) && (user.get(detail.label).hasError('required') || user.get(detail.label).hasError('minlength') || user.get(detail.label).hasError('maxlength') || user.get(detail.label).hasError('email'))">
+                    <select *ngSwitchCase="'dropdown'" [formControlName]="detail.label" class="form-control">
+                        <option *ngFor="let opt of detail.options" [value]="opt">{{opt}}</option>
+                    </select>
+                    <div class="alert-danger" *ngIf="user.get(detail.label).hasError('required') && (user.get(detail.label).dirty || user.get(detail.label).touched)">此项是必填项</div>
+                    <div class="alert-danger" *ngIf="(user.get(detail.label).hasError('minlength') || user.get(detail.label).hasError('maxlength')) && (user.get(detail.label).dirty || user.get(detail.label).touched)">最小长度为4,最大长度为8</div>
+                    <div class="alert-danger" *ngIf="user.get(detail.label).hasError('email') && (user.get(detail.label).dirty || user.get(detail.label).touched)">您的邮箱格式不对</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="button-group">
+                    <button type="button" pButton icon="fa-close" label="Save" (click)="save()"  [disabled]="user.invalid"></button>
+                    <button type="button" pButton icon="fa-check" label="Cancel" (click)="cancel()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<p-growl [value]="msgs"></p-growl>

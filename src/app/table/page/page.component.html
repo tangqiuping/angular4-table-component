@@ -1,0 +1,27 @@
+<div class="page-list">
+    <ul class="pagination" *ngIf="pagination.totalItems > 0">
+        <li [ngClass]="{disabled: pagination.currentPage == 1}" (click)="prevPage()">
+            <span>&laquo;</span>
+        </li> 
+        <li *ngFor="let item of pageList;trackBy:index" [ngClass]="{active: item == pagination.currentPage, separate: item == '...'}" (click)="changeCurrentPage(item)">
+            <span>{{ item }}</span>
+        </li>
+        <li [ngClass]="{disabled: pagination.currentPage == pagination.numberOfPages}" (click)="nextPage()">
+            <span>&raquo;</span>
+        </li>
+    </ul>
+    <div class="page-total" ng-show="pagination.totalItems > 0">
+        <span >第 </span>
+        <input type="text" (keyup.enter)="jumpToPage()" (focus)="jumpPageNum=''" (blur)="jumpPageNum=pagination.currentPage" [(ngModel)]="jumpPageNum" />
+        <span>页</span>
+        <span>每页</span>
+        <select [(ngModel)]="pagination.itemsPerPage">
+            <option [value]="options" *ngFor="let options of pagination.perPageOptions">{{options}}</option>
+        </select>
+        <span>条数据</span>
+        <span> 共</span> 
+        <strong>{{ pagination.totalItems }}</strong> 
+        <span>条</span>
+    </div>
+    <!-- <ng-content></ng-content> -->
+</div>

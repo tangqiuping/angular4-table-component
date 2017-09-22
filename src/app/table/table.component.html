@@ -1,0 +1,27 @@
+<div *ngIf="!displayDialog">
+    <h3 class="first">Table</h3>
+    <div class="clearfix" style="padding:4px 10px;border-bottom: 0 none" *ngIf="export">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+        <button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:right;"></button>
+    </div>
+    <p-dataTable [value]="values" [editable]="editable" [scrollHeight]="scrollHeight" scrollable="true"  reorderableColumns="true" [responsive]="true" [stacked]="stacked" (onRowSelect)="onRowSelect($event)" [globalFilter]="gb" #dt>
+        <p-header>
+            <div style="text-align:left">
+                <p-multiSelect [options]="columnOptions" [(ngModel)]="columns" *ngIf="multiSelect"></p-multiSelect>
+            </div>
+        </p-header>
+        <p-header><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></p-header>
+        <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+        <p-column *ngFor="let column of columns" [field]="column.field" [header]="column.header" [style]="column.style" [editable]="column.editable" [sortable]="column.sortable"></p-column>
+        <p-column header="Action" [style]="{'text-align':'center'}">
+            <ng-template let-data="rowData" pTemplate="body">
+                <span class="glyphicon glyphicon-pencil" (click)="detailItem(data)"></span><span class="glyphicon glyphicon-trash" (click)="removeItem(data)"></span>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+    <app-page [pagination]="pagination"></app-page>
+</div>
+<app-detail [displayDialog]="displayDialog" [detail]="dataDetail" (visibility)="displayDialog=$event" [newData]="newData" [detailColumns]="detailColumns"></app-detail>
+<p-confirmDialog></p-confirmDialog>
+<p-growl [value]="msgs"></p-growl>
